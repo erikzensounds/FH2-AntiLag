@@ -1,0 +1,12 @@
+{
+  "format_version": 1,
+  "id": "extraoptions-anti-lag",
+  "name": "Extra Options - Anti Lag",
+  "author": "Custom extension using RokkuDayo Extra Options SDK",
+  "version": "0.4.1-shop-names",
+  "description": "Race turbo with anti-lag workshop parts with localized names.",
+  "dependencies": [],
+  "database": "database.json",
+  "strings": "strings.json",
+  "media": null
+}

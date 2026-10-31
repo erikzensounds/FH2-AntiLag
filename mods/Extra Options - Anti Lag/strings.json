@@ -1,0 +1,132 @@
+{
+  "format_version": 1,
+  "fallback_language": "EN",
+  "languages": {
+    "EN": {
+      "Upgrades": {
+        "60000": "Race Turbo with Anti-Lag",
+        "60001": "Race Twin Turbo with Anti-Lag",
+        "60002": "Maintains turbo boost on lift-off, with exhaust pops and flames. Requires the Anti Lag mod. Uses the race turbo specifications."
+      }
+    },
+    "GB": {
+      "Upgrades": {
+        "60000": "Race Turbo with Anti-Lag",
+        "60001": "Race Twin Turbo with Anti-Lag",
+        "60002": "Maintains turbo boost on lift-off, with exhaust pops and flames. Requires the Anti Lag mod. Uses the race turbo specifications."
+      }
+    },
+    "BR": {
+      "Upgrades": {
+        "60000": "Turbo de corrida com anti-lag",
+        "60001": "Turbo duplo de corrida com anti-lag",
+        "60002": "Mantém a pressão do turbo ao soltar o acelerador, com estouros e chamas no escapamento. Requer o mod Anti Lag. Mantém as especificações do turbo de corrida."
+      }
+    },
+    "CHT": {
+      "Upgrades": {
+        "60000": "配備偏時點火的賽車渦輪增壓器",
+        "60001": "配備偏時點火的賽車雙渦輪增壓器",
+        "60002": "鬆開油門時維持渦輪增壓壓力，並產生排氣爆音與火焰。需要 Anti Lag 模組。沿用賽車渦輪增壓器的規格。"
+      }
+    },
+    "CZ": {
+      "Upgrades": {
+        "60000": "Závodní turbo s anti-lagem",
+        "60001": "Závodní dvojité turbo s anti-lagem",
+        "60002": "Při uvolnění plynu udržuje plnicí tlak turba a vytváří praskání a plameny z výfuku. Vyžaduje mod Anti Lag. Zachovává parametry závodního turba."
+      }
+    },
+    "DE": {
+      "Upgrades": {
+        "60000": "Renn-Turbolader mit Anti-Lag",
+        "60001": "Renn-Biturbo mit Anti-Lag",
+        "60002": "Hält beim Gaswegnehmen den Ladedruck aufrecht und erzeugt Auspuffknallen und Flammen. Benötigt die Mod Anti Lag. Behält die technischen Daten des Renn-Turboladers bei."
+      }
+    },
+    "ES": {
+      "Upgrades": {
+        "60000": "Turbo de competición con anti-lag",
+        "60001": "Doble turbo de competición con anti-lag",
+        "60002": "Mantiene la presión del turbo al soltar el acelerador, con petardeos y llamas en el escape. Requiere el mod Anti Lag. Conserva las especificaciones del turbo de competición."
+      }
+    },
+    "FR": {
+      "Upgrades": {
+        "60000": "Turbo de course avec anti-lag",
+        "60001": "Double turbo de course avec anti-lag",
+        "60002": "Maintient la pression du turbo au relâchement de l’accélérateur, avec des détonations et des flammes à l’échappement. Nécessite le mod Anti Lag. Conserve les caractéristiques du turbo de course."
+      }
+    },
+    "HU": {
+      "Upgrades": {
+        "60000": "Versenyturbó anti-lag rendszerrel",
+        "60001": "Dupla versenyturbó anti-lag rendszerrel",
+        "60002": "Gázelvételkor fenntartja a turbónyomást, a kipufogó pedig durrog és lángot vet. Az Anti Lag mod szükséges hozzá. Megőrzi a versenyturbó műszaki jellemzőit."
+      }
+    },
+    "IT": {
+      "Upgrades": {
+        "60000": "Turbo da gara con anti-lag",
+        "60001": "Doppio turbo da gara con anti-lag",
+        "60002": "Mantiene la pressione del turbo al rilascio dell’acceleratore, con scoppiettii e fiamme dallo scarico. Richiede la mod Anti Lag. Mantiene le specifiche del turbo da gara."
+      }
+    },
+    "JP": {
+      "Upgrades": {
+        "60000": "アンチラグ付きレースターボ",
+        "60001": "アンチラグ付きレースツインターボ",
+        "60002": "アクセルを戻したときにターボの過給圧を維持し、排気音と炎を発生させます。Anti Lag MODが必要です。レースターボの諸元を引き継ぎます。"
+      }
+    },
+    "KO": {
+      "Upgrades": {
+        "60000": "안티랙 레이스 터보",
+        "60001": "안티랙 레이스 트윈 터보",
+        "60002": "가속 페달에서 발을 떼면 터보 부스트 압력을 유지하고 배기구에서 팝콘 사운드와 화염을 발생시킵니다. Anti Lag 모드가 필요합니다. 레이스 터보의 제원을 유지합니다."
+      }
+    },
+    "MX": {
+      "Upgrades": {
+        "60000": "Turbo de carreras con anti-lag",
+        "60001": "Doble turbo de carreras con anti-lag",
+        "60002": "Mantiene la presión del turbo al soltar el acelerador, con explosiones y llamas en el escape. Requiere el mod Anti Lag. Conserva las especificaciones del turbo de carreras."
+      }
+    },
+    "NL": {
+      "Upgrades": {
+        "60000": "Raceturbo met anti-lag",
+        "60001": "Dubbele raceturbo met anti-lag",
+        "60002": "Behoudt de turbodruk bij het loslaten van het gaspedaal, met uitlaatknallen en vlammen. Vereist de Anti Lag-mod. Behoudt de specificaties van de raceturbo."
+      }
+    },
+    "PL": {
+      "Upgrades": {
+        "60000": "Wyścigowe turbo z anti-lagiem",
+        "60001": "Wyścigowe podwójne turbo z anti-lagiem",
+        "60002": "Utrzymuje ciśnienie doładowania po puszczeniu gazu, powodując strzały i płomienie z wydechu. Wymaga moda Anti Lag. Zachowuje parametry wyścigowego turbo."
+      }
+    },
+    "RU": {
+      "Upgrades": {
+        "60000": "Гоночный турбонаддув с антилагом",
+        "60001": "Гоночный двойной турбонаддув с антилагом",
+        "60002": "Поддерживает давление наддува при отпускании педали газа, со стрельбой и пламенем из выхлопной трубы. Требуется мод Anti Lag. Сохраняет характеристики гоночного турбонаддува."
+      }
+    },
+    "DEV": {
+      "Upgrades": {
+        "60000": "Race Turbo with Anti-Lag",
+        "60001": "Race Twin Turbo with Anti-Lag",
+        "60002": "Maintains turbo boost on lift-off, with exhaust pops and flames. Requires the Anti Lag mod. Uses the race turbo specifications."
+      }
+    },
+    "LOC": {
+      "Upgrades": {
+        "60000": "Race Turbo with Anti-Lag",
+        "60001": "Race Twin Turbo with Anti-Lag",
+        "60002": "Maintains turbo boost on lift-off, with exhaust pops and flames. Requires the Anti Lag mod. Uses the race turbo specifications."
+      }
+    }
+  }
+}

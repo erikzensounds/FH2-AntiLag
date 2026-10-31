@@ -1,0 +1,15 @@
+static const struct {const char *sql;int check,lookup;} catalog_sql[]={
+{"SAVEPOINT fh2_antilag_catalog",0,0},
+{"CREATE TEMP TABLE FH2_ALS_Planned(PartEnum INTEGER,Id INTEGER,SourceId INTEGER,EngineID INTEGER)",0,0},
+{"INSERT INTO FH2_ALS_Planned SELECT 24,805306368+Id,Id,EngineID FROM List_UpgradeEngineTurboSingle WHERE Level=3 AND IsStock=0",0,0},
+{"INSERT INTO FH2_ALS_Planned SELECT 25,805306368+Id,Id,EngineID FROM List_UpgradeEngineTurboTwin WHERE Level=3 AND IsStock=0",0,0},
+{"CREATE UNIQUE INDEX temp.FH2_ALS_Id ON FH2_ALS_Planned(PartEnum,Id)",0,0},
+{"CREATE UNIQUE INDEX temp.FH2_ALS_Engine ON FH2_ALS_Planned(PartEnum,EngineID)",0,0},
+{"SELECT CASE WHEN\n (SELECT COUNT(*) FROM FH2_ALS_Planned) BETWEEN 1 AND 4096\n AND NOT EXISTS(SELECT 1 FROM List_UpgradeEngineTurboSingle WHERE Level=4 OR Id IN(SELECT Id FROM FH2_ALS_Planned WHERE PartEnum=24))\n AND NOT EXISTS(SELECT 1 FROM List_UpgradeEngineTurboTwin WHERE Level=4 OR Id IN(SELECT Id FROM FH2_ALS_Planned WHERE PartEnum=25))\n AND NOT EXISTS(SELECT 1 FROM Upgrades WHERE id IN(805306376,805306419) OR (TypeId IN('8','51') AND Level=4))\n AND (SELECT COUNT(*) FROM Upgrades WHERE TypeId='8' AND Level=3 AND IsException=0)=1\n AND (SELECT COUNT(*) FROM Upgrades WHERE TypeId='51' AND Level=3 AND IsException=0)=1\n AND NOT EXISTS(SELECT 1 FROM FH2_ALS_Planned WHERE Id<=0 OR Id>=2147483647)\n THEN 1 ELSE 0 END",1,0},
+{"INSERT INTO List_UpgradeEngineTurboSingle SELECT 805306368+Id,EngineID,4,0,ManufacturerID,MassDiff,WeightDistDiff,Price+2000,MomentInertia,MaxScale,PowerMaxScale,MinScale,PowerMinScale,RobScale,TorqueDropOffRPM0,TorqueDropOffRPM1,TorqueDropOffScale0,TorqueDropOffScale1 FROM List_UpgradeEngineTurboSingle WHERE Level=3 AND IsStock=0",0,0},
+{"INSERT INTO List_UpgradeEngineTurboTwin SELECT 805306368+Id,EngineID,4,0,ManufacturerID,MassDiff,WeightDistDiff,Price+2000,MomentInertia,MaxScale,PowerMaxScale,MinScale,PowerMinScale,RobScale,TorqueDropOffRPM0,TorqueDropOffRPM1,TorqueDropOffScale0,TorqueDropOffScale1 FROM List_UpgradeEngineTurboTwin WHERE Level=3 AND IsStock=0",0,0},
+{"INSERT INTO Upgrades SELECT 805306368+CAST(TypeId AS INTEGER),TypeId,0,CASE TypeId WHEN '8' THEN '_&1888610912' ELSE '_&1888610913' END,4,'_&1888610914',IconPath,ImagePath FROM Upgrades WHERE TypeId IN('8','51') AND Level=3 AND IsException=0",0,0},
+{"SELECT PartEnum,Id FROM FH2_ALS_Planned ORDER BY PartEnum,Id",0,1},
+{"DROP TABLE FH2_ALS_Planned",0,0},
+{"RELEASE fh2_antilag_catalog",0,0},
+};

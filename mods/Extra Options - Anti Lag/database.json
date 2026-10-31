@@ -1,0 +1,14 @@
+{
+  "format_version": 2,
+  "target": {"database": "media/stripped/gamedbRC.slt"},
+  "policy": {"id_conflicts": "error", "update_conflicts": "error"},
+  "requires": {
+    "records": {
+      "Upgrades": [
+        {"TypeId": "8", "Level": 3, "IsException": 0},
+        {"TypeId": "51", "Level": 3, "IsException": 0}
+      ]
+    }
+  },
+  "tables": {}
+}
