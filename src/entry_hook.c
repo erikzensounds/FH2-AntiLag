@@ -107,3 +107,19 @@ void *entry_hook_install(unsigned char *image, size_t image_size, uint32_t rva,
     VirtualProtect(entry, 8, old, &old);
     return trampoline;
 }
+
+// Chain the existing EO resource thunk. Its immediate is unaligned; all other
+// threads must be suspended before changing it. No original game code is lost.
+int entry_hook_chain_thunk(unsigned char *image,size_t size,unsigned rva,void *handler,void **previous){
+    if(rva+12>size)return 0;
+    unsigned char *entry=image+rva,expected[12];memcpy(expected,entry,12);
+    if(entry[0]!=0x48||entry[1]!=0xb8||entry[10]!=0xff||entry[11]!=0xe0)return 0;
+    void *next=NULL;memcpy(&next,entry+2,8);if(!next)return 0;
+    DWORD old,unused;if(!VirtualProtect(entry,12,PAGE_EXECUTE_READWRITE,&old))return 0;
+    int count=suspend_others((uintptr_t)entry,(uintptr_t)entry+12);
+    if(count<0){VirtualProtect(entry,12,old,&unused);return 0;}
+    int ok=!memcmp(entry,expected,12);
+    if(ok){*previous=next;MemoryBarrier();memcpy(entry+2,&handler,8);FlushInstructionCache(GetCurrentProcess(),entry,12);}
+    while(count-->0){ResumeThread(suspended[count]);CloseHandle(suspended[count]);}
+    VirtualProtect(entry,12,old,&unused);return ok;
+}

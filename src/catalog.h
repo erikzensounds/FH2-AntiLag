@@ -21,6 +21,7 @@ static int catalog_query(const FH2PluginDatabaseFrame *f,const char *sql,int che
 }
 __declspec(dllexport) BOOL WINAPI FH2PluginDatabaseUpdate(const FH2PluginDatabaseFrame *f){
     InterlockedExchange(&catalog_ready,0);catalog_count=0;
+    model_parts_count=0;selected_model=-1;
     if(!f || f->size<sizeof(*f) || f->api_version!=1 || !f->database || !f->prepare || !f->step || !f->finalize || !f->column_int64)return FALSE;
     for(unsigned i=0;i<sizeof(catalog_sql)/sizeof(*catalog_sql);i++){
         if(!catalog_query(f,catalog_sql[i].sql,catalog_sql[i].check,catalog_sql[i].lookup)){
@@ -29,6 +30,7 @@ __declspec(dllexport) BOOL WINAPI FH2PluginDatabaseUpdate(const FH2PluginDatabas
             catalog_count=0;log_line("ANTI-LAG SHOP: catalog refused; transaction rolled back; anti-lag disabled.\r\n");return FALSE;
         }
     }
+    if(!profiles_map_models(f))log_line("ANTI-LAG PROFILES: model mapping unavailable; global settings will be used.\r\n");
     InterlockedExchange(&catalog_ready,1);
     char line[160];snprintf(line,sizeof line,"ANTI-LAG SHOP: %u extra race turbo parts added in memory; original parts preserved.\r\n",catalog_count);log_line(line);
     return TRUE;

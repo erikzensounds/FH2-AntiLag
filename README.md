@@ -2,7 +2,7 @@
 
 Race turbo upgrades with anti-lag, native exhaust pops and flames for Forza Horizon 2 running through Azimuth and Extra Options.
 
-**v0.4.1 Beta** — community mod, not an official Forza release.
+**v0.6.8 Beta** — community mod, not an official Forza release.
 
 ## Requirements
 
@@ -17,17 +17,25 @@ The plugin checks the Extra Options version and game-code signatures. Other vers
 
 1. Close the game and the Azimuth launcher completely.
 2. Back up your existing `mods` folder and `data/titles/1A96545B/saves` folder.
-3. Download the **FH2-AntiLag-v0.4.1-beta.zip** release asset. GitHub's automatic source archives do not contain the compiled plugin.
-4. Copy the ZIP's `mods/Extra Options - Anti Lag` folder into the `mods` folder beside `Azimuth.exe`. Install exactly one copy of this mod. When updating, retain your existing `plugins/EO_AntiLag.ini` if you want to keep your configuration.
+3. Download the **FH2-AntiLag-v0.6.8-beta.zip** release asset. GitHub's automatic source archives do not contain the compiled plugin.
+4. Copy the ZIP's `mods/Extra Options - Anti Lag` folder into the `mods` folder beside `Azimuth.exe`. Install exactly one copy of this mod. When updating, retain your existing `plugins/EO_AntiLag.ini` AND `plugins/EO_AntiLag_Profiles.ini` to keep your configuration and per-model tuning. Copy the other release files over the old version.
 5. The Extra Options loader discovers new mod folders automatically. If this mod was previously disabled in `mods/loadorder.txt`, uncomment its exact folder entry. Restart the game.
 
 ## Usage
 
 In the workshop, select **Engine → Turbo / Twin Turbo** and equip **Race Turbo with Anti-Lag** or **Race Twin Turbo with Anti-Lag**. The normal turbo does not enable anti-lag. After changing from twin to single turbo, equip the corresponding special single-turbo part.
 
-Accelerate to build boost, then release the throttle. Anti-lag retains part of the attained turbo state and requests native exhaust pops and flames. Reapplying throttle cancels the lift-off effect. **F7** toggles anti-lag during driving; toggling does not save the switch to the INI.
+Accelerate to build boost, then release the throttle. Anti-lag retains part of the attained turbo state and requests native exhaust pops and flames. Reapplying throttle cancels the lift-off effect. Anti-lag is automatically available whenever the special turbo is equipped. There is no F7 toggle; legacy Enabled and ToggleVirtualKey INI entries are ignored.
 
 The default cutoff is 1800 RPM and charging requires at least 2500 RPM, sufficient throttle and boost. Effect duration depends on pressure, RPM and pedal input; the 6000 ms decay setting is not a guaranteed six-second effect.
+
+## Tune Car > TURBO
+
+Adjust pressure decay, boost retention, cutoff RPM and pop interval in the native tuning screen. Changes are saved immediately for the **car model**, separately from the game's normal Apply/Cancel flow; two garage copies of the same model share settings. Existing profiles are preserved, including through engine/turbo swaps. Cars without a profile start from the general INI values.
+
+Loading the game's **Default tuning settings** is intended to reset the current equipped anti-lag car profile to **6000 ms / 85% / 1800 RPM / 140 ms**. The Global/This car selector has been removed. The four native-style headers indicate the direction of adjustment. Context help is intended to follow the focused row. This new screen is in English; workshop part translations remain available as below.
+
+**Latest beta validation:** the user confirmed the TURBO tab opens, values display and sliders can be edited in the preceding build. The new description visibility and native defaults-reset integration in 0.6.8 have passed automated/simulated checks but still need confirmation in FH2. Treat this as a testing release.
 
 ## Workshop behaviour
 

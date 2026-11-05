@@ -15,9 +15,8 @@ static ALSState state;
 static uintptr_t last_physics;
 static PVOID volatile pop_identity;
 static volatile LONG enabled;
-static int key_was_down,ready;
+static int ready;
 static float duration=6.0f,retain=0.85f,min_rpm=1800,interval=0.14f;
-static unsigned key=0x76;
 static HANDLE logfile=INVALID_HANDLE_VALUE;
 static unsigned holds,pops;
 static LARGE_INTEGER counter_frequency,last_counter;
@@ -42,6 +41,7 @@ static int readable(const void *p,size_t bytes){
 }
 static float number(const void *p,unsigned off){float x;memcpy(&x,(const char *)p+off,4);return x;}
 static int integer(const void *p,unsigned off){int x;memcpy(&x,(const char *)p+off,4);return x;}
+#include "profiles.h"
 #include "catalog.h"
 static void clear_state(void){als_reset(&state);InterlockedExchangePointer(&pop_identity,NULL);InterlockedExchangePointer(&effect_car,NULL);InterlockedExchangePointer(&audio_snapshot,NULL);InterlockedExchange64(&burst_until,0);last_physics=0;last_counter.QuadPart=0;}
 static void guard_log(unsigned flag,const char *message){if(!(guard_mask&flag)){guard_mask|=flag;log_line(message);}}
@@ -92,6 +92,7 @@ static void burble(void *self,float dt,void *physics_ref){
     }
 }
 void *entry_hook_install(unsigned char *,size_t,uint32_t,const unsigned char *,unsigned,void *,void **);
+#include "turbo_ui.h"
 __declspec(dllexport) BOOL WINAPI FH2PluginInitialize(const FH2PluginContext *ctx){
     if(!ctx || ctx->size<sizeof(*ctx) || ctx->api_version!=1 || ctx->adapter!=FH2_PLUGIN_AZIMUTH ||
        ctx->game_image_size!=0x3a18000 || !ctx->game_image || !ctx->extra_options_version || strcmp(ctx->extra_options_version,"0.4.4"))return FALSE;
@@ -110,8 +111,7 @@ __declspec(dllexport) BOOL WINAPI FH2PluginInitialize(const FH2PluginContext *ct
     int popms=(int)GetPrivateProfileIntW(L"AntiLag",L"PopIntervalMs",140,ini);
     if(ms<1000 || ms>8000 || percent<25 || percent>95 || rpm<1000 || rpm>6000 || popms<100 || popms>500){log_line("ANTI-LAG: invalid configuration; initialization refused.\r\n");return FALSE;}
     duration=ms/1000.0f;retain=percent/100.0f;min_rpm=(float)rpm;interval=popms/1000.0f;
-    key=GetPrivateProfileIntW(L"AntiLag",L"ToggleVirtualKey",0x76,ini);
-    if(key>255){log_line("ANTI-LAG: invalid key; initialization refused.\r\n");return FALSE;}
+    profiles_load(ctx->plugins_directory,(ALSSettings){ms,percent,rpm,popms});
     if(!QueryPerformanceFrequency(&counter_frequency) || counter_frequency.QuadPart<=0){log_line("ANTI-LAG: performance clock unavailable; refusing activation.\r\n");return FALSE;}
     const unsigned hook_rvas[]={0xf7cf90,0x13b0d70,0x1026b80,0xf7d8a0};
     const unsigned lengths[]={8,8,10,8};
@@ -124,18 +124,12 @@ __declspec(dllexport) BOOL WINAPI FH2PluginInitialize(const FH2PluginContext *ct
         char message[140];snprintf(message,sizeof message,"ANTI-LAG: hook at game+0x%x refused; plugin disabled.\r\n",hook_rvas[h]);log_line(message);return FALSE;
         }
     }
-    InterlockedExchange(&enabled,GetPrivateProfileIntW(L"AntiLag",L"Enabled",1,ini)!=0);ready=1;
-    log_line("ANTI-LAG 0.4.1 shop initialized; localized workshop names; anti-lag requires the special turbo; F7 toggles.\r\n");return TRUE;
+    InterlockedExchange(&enabled,1);ready=1;
+    turbo_install(ctx->game_image_size);
+    log_line("ANTI-LAG 0.6.8 experimental initialized; per-car settings and native defaults reset; TURBO menu; special turbo required; always active when equipped; no toggle key.\r\n");return TRUE;
 }
 __declspec(dllexport) void FH2PluginVehicleUpdate(const FH2PluginVehicleFrame *frame){
     if(!ready || !frame || frame->size<sizeof(*frame))return;
-    int down=key && (GetAsyncKeyState((int)key)&0x8000);
-    if(frame->input_enabled && down && !key_was_down){
-        LONG old=InterlockedCompareExchange(&enabled,0,0);InterlockedExchange(&enabled,!old);clear_state();
-        log_line(old?"ANTI-LAG: OFF.\r\n":"ANTI-LAG: ON.\r\n");
-        diagnostic_count=0;next_diagnostic=0;
-    }
-    key_was_down=down;
     // Consumer window survives several simulation updates, but never pedal return.
     void *car=frame->car;
     if(!frame->input_enabled){guard_log(1,"ANTI-LAG GUARD: gameplay input inactive; resetting.\r\n");clear_state();return;}
@@ -146,6 +140,16 @@ __declspec(dllexport) void FH2PluginVehicleUpdate(const FH2PluginVehicleFrame *f
     void *physics=*(void **)((char *)car+0x4c08);
     if(!readable(physics,0x11b0) || *(void **)physics!=image+0x2eb5e18){guard_log(4,"ANTI-LAG GUARD: dynamics layout mismatch.\r\n");clear_state();return;}
     if(last_physics!=(uintptr_t)physics){clear_state();last_physics=(uintptr_t)physics;}
+    int model=profile_model(integer(car,0x128));
+    static LONG selected_revision=-1;LONG revision=InterlockedCompareExchange(&profile_revision,0,0);
+    if(model!=selected_model||revision!=selected_revision){
+        selected_revision=revision;
+        clear_state();last_physics=(uintptr_t)physics;selected_model=model;
+        int custom=0;ALSSettings settings=profiles_choose(model,&custom);
+        duration=settings.decay/1000.0f;retain=settings.retention/100.0f;min_rpm=(float)settings.cutoff;interval=settings.pop/1000.0f;
+        diagnostic_count=0;next_diagnostic=0;
+        char line[256];snprintf(line,sizeof line,"ANTI-LAG PROFILE: model=%d source=%s PressureDecayMs=%d RetentionPercent=%d CutoffRPM=%d PopIntervalMs=%d\r\n",model,custom?"car":"global",settings.decay,settings.retention,settings.cutoff,settings.pop);log_line(line);
+    }
     LARGE_INTEGER now;if(!QueryPerformanceCounter(&now)){clear_state();return;}
     float elapsed=last_counter.QuadPart?(float)((double)(now.QuadPart-last_counter.QuadPart)/(double)counter_frequency.QuadPart):0;
     last_counter=now;
